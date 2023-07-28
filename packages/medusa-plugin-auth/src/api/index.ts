@@ -7,6 +7,7 @@ import LinkedinStrategy from '../auth-strategies/linkedin';
 import FirebaseStrategy from '../auth-strategies/firebase';
 import Auth0Strategy from '../auth-strategies/auth0';
 import AzureStrategy from '../auth-strategies/azure-oidc';
+import CognitoStartegy from '../auth-strategies/cognito';
 
 import { AuthOptions } from '../types';
 
@@ -24,6 +25,7 @@ function loadRouters(configModule: ConfigModule, options: AuthOptions): Router[]
 	routers.push(...FirebaseStrategy.getRouter(configModule, options));
 	routers.push(...Auth0Strategy.getRouter(configModule, options));
 	routers.push(...AzureStrategy.getRouter(configModule, options));
+	routers.push(...CognitoStartegy.getRouter(configModule, options));
 
 	return routers;
 }
