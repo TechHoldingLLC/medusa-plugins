@@ -10,22 +10,22 @@ export * from './types';
 
 export default {
 	load: (container: MedusaContainer, configModule: ConfigModule, options: AuthOptions): void => {
-		if (options.auth0?.admin) {
+		if (options.cognito?.admin) {
 			new CognitoAdminStrategy(container, configModule, options.cognito, options.strict);
 		}
 
-		if (options.auth0?.store) {
+		if (options.cognito?.store) {
 			new CognitoStoreStrategy(container, configModule, options.cognito, options.strict);
 		}
 	},
 	getRouter: (configModule: ConfigModule, options: AuthOptions): Router[] => {
 		const routers = [];
 
-		if (options.auth0?.admin) {
+		if (options.cognito?.admin) {
 			routers.push(getCognitoAdminAuthRouter(options.cognito, configModule));
 		}
 
-		if (options.auth0?.store) {
+		if (options.cognito?.store) {
 			routers.push(getCognitoStoreAuthRouter(options.cognito, configModule));
 		}
 
