@@ -1,6 +1,6 @@
 import { ConfigModule, MedusaContainer } from '@medusajs/medusa';
 import { Router } from 'express';
-import CognitoStrategy from 'passport-cognito';
+import { CognitoStrategy, COGNITO_ADMIN_STRATEGY_NAME } from './strategy';
 
 import { passportAuthRoutesBuilder } from '../../core/passport/utils/auth-routes-builder';
 import { validateAdminCallback } from '../../core/validate-callback';
@@ -8,7 +8,7 @@ import { PassportStrategy } from '../../core/passport/Strategy';
 
 import { AuthOptions } from '../../types';
 
-import { CognitoOptions, COGNITO_ADMIN_STRATEGY_NAME, ExtraParams, Profile } from './types';
+import { CognitoOptions, ExtraParams, Profile } from './types';
 
 export class CognitoAdminStrategy extends PassportStrategy(CognitoStrategy, COGNITO_ADMIN_STRATEGY_NAME) {
 	constructor(
