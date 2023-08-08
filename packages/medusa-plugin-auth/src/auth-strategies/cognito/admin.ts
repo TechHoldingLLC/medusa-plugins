@@ -1,6 +1,6 @@
+const CognitoStrategy = require('./startegy');
 import { ConfigModule, MedusaContainer } from '@medusajs/medusa';
 import { Router } from 'express';
-import { CognitoStrategy, COGNITO_ADMIN_STRATEGY_NAME } from './strategy';
 
 import { passportAuthRoutesBuilder } from '../../core/passport/utils/auth-routes-builder';
 import { validateAdminCallback } from '../../core/validate-callback';
@@ -8,7 +8,7 @@ import { PassportStrategy } from '../../core/passport/Strategy';
 
 import { AuthOptions } from '../../types';
 
-import { CognitoOptions, ExtraParams, Profile } from './types';
+import { CognitoOptions, CognitoProfile, COGNITO_ADMIN_STRATEGY_NAME, ExtraParams, Profile } from './types';
 
 export class CognitoAdminStrategy extends PassportStrategy(CognitoStrategy, COGNITO_ADMIN_STRATEGY_NAME) {
 	constructor(
@@ -33,16 +33,20 @@ export class CognitoAdminStrategy extends PassportStrategy(CognitoStrategy, COGN
 		req: Request,
 		accessToken: string,
 		refreshToken: string,
-		extraParams: ExtraParams,
-		profile: Profile
+		profile: CognitoProfile,
+		extraParams: ExtraParams
 	) {
+		const authProfile: Profile = {
+			emails: [{ value: profile.email }],
+			name: { givenName: profile.name },
+		};
 		if (this.strategyOptions.admin.verifyCallback) {
 			const validateRes = await this.strategyOptions.admin.verifyCallback(
 				this.container,
 				req,
 				accessToken,
 				refreshToken,
-				profile,
+				authProfile,
 				extraParams,
 				this.strict
 			);
@@ -52,7 +56,8 @@ export class CognitoAdminStrategy extends PassportStrategy(CognitoStrategy, COGN
 				accessToken,
 			};
 		}
-		const validateRes = await validateAdminCallback(profile, {
+
+		const validateRes = await validateAdminCallback(authProfile, {
 			container: this.container,
 			strategyErrorIdentifier: 'cognito',
 			strict: this.strict,

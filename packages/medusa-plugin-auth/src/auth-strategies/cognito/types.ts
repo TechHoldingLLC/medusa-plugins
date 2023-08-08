@@ -1,10 +1,12 @@
 import { MedusaContainer } from '@medusajs/medusa';
+import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
 import { AuthOptions } from '../../types';
 
 export const COGNITO_ADMIN_STRATEGY_NAME = 'cognito.admin.medusa-auth-plugin';
 export const COGNITO_STORE_STRATEGY_NAME = 'cognito.store.medusa-auth-plugin';
 
 export type Profile = { emails: { value: string }[]; name?: { givenName?: string; familyName?: string } };
+export type CognitoProfile = { email: string; name: string; username: string; attributes: AttributeType[] };
 export type ExtraParams = {};
 
 export type CognitoOptions = {
